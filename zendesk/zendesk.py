@@ -38,6 +38,7 @@ from endpoints_v2 import mapping_table as mapping_table_v2
 V2_COLLECTION_PARAMS = [
     'page',
     'per_page',
+    'sort_by',
     'sort_order',
 ]
 
@@ -156,7 +157,11 @@ class Zendesk(object):
             Should probably url-encode GET query parameters on replacement
         """
         def call(self, **kwargs):
-            """ """
+            """
+            """
+
+            force_encoding = kwargs.pop('force_encoding', True)
+
             api_map = self.mapping_table[api_call]
             path = api_map['path']
             if self.api_version == 2:
@@ -184,7 +189,7 @@ class Zendesk(object):
                                     "'%s'" % (api_call, kw))
             else:
                 clean_kwargs(kwargs)
-                url += '?' + urllib.urlencode(kwargs)
+                url += '?' + (urllib.urlencode(kwargs) if force_encoding else urllib.unquote(urllib.urlencode(kwargs)))
 
             # the 'search' endpoint in an open Zendesk site doesn't return a
             # 401 to force authentication. Inject the credentials in the
