@@ -189,8 +189,8 @@ class Zendesk(object):
                                     "'%s'" % (api_call, kw))
             else:
                 clean_kwargs(kwargs)
-                url += '?' + (urllib.urlencode(kwargs) if force_encoding else urllib.unquote(urllib.urlencode(kwargs)))
-
+                url += '?' + urllib.urlencode(kwargs)
+                
             # the 'search' endpoint in an open Zendesk site doesn't return a
             # 401 to force authentication. Inject the credentials in the
             # headers to ensure we get the results we're looking for
